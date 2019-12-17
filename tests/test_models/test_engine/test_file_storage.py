@@ -52,6 +52,26 @@ class TestFileStorage(unittest.TestCase):
         self.assertEqual(type(obj), dict)
         self.assertIs(obj, storage._FileStorage__objects)
 
+    def test_all_delete(self):
+        """tests if all with filter and delete works in File Storage"""
+        fs = FileStorage()
+        # All States
+        all_states = fs.all(State)
+        self.assertEqual(len(all_states.keys()), 0)
+        # Create a new State
+        new_state = State()
+        new_state.name = "California"
+        fs.new(new_state)
+        fs.save()
+        # All States
+        all_states = fs.all(State)
+        self.assertEqual(len(all_states.keys()), 1)
+        # Delete the new State
+        fs.delete(new_state)
+        # All States
+        all_states = fs.all(State)
+        self.assertEqual(len(all_states.keys()), 0)
+
     def test_new(self):
         """test when new is created"""
         storage = FileStorage()
