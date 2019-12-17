@@ -67,9 +67,7 @@ class FileStorage:
         """delete obj from __objects if it’s inside
         """
         # If key is not present in dictionary, then pass
-        try:
-            key = "{}.{}".format(type(obj).__name__, obj.id)
+        key = "{}.{}".format(type(obj).__name__, obj.id)
+        if key in self.__objects:
             del self.__objects[key]
-            self.save()
-        except KeyError:
-            pass
+        self.save()
