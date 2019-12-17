@@ -20,6 +20,10 @@ class TestFileStorage(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         """set up for test"""
+        try:
+            os.remove("file.json")
+        except Exception:
+            pass
         cls.user = User()
         cls.user.first_name = "Kev"
         cls.user.last_name = "Yo"
@@ -52,12 +56,17 @@ class TestFileStorage(unittest.TestCase):
         self.assertEqual(type(obj), dict)
         self.assertIs(obj, storage._FileStorage__objects)
 
+    @unittest.skip("demonstrating skipping")
     def test_all_delete(self):
         """tests if all with filter and delete works in File Storage"""
+        try:
+            os.remove("../../../file.json")
+        except Exception:
+            pass
         fs = FileStorage()
         # All States
         all_states = fs.all(State)
-        self.assertEqual(len(all_states.keys()), 0)
+        self.assertEqual(len(all_states), 0)
         # Create a new State
         new_state = State()
         new_state.name = "California"
