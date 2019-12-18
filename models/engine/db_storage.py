@@ -54,7 +54,7 @@ class DBStorage:
                     # my_dict[key] = new
                     my_dict[key] = obj
                 # print(my_dict)
-                return my_dict
+            return my_dict
         else:
             print("No None")
             # query = self.__session.query(eval(cls)).all()
@@ -63,7 +63,7 @@ class DBStorage:
                 key = "{}.{}".format(type(obj).__name__, obj.id)
                 my_dict[key] = obj
             # print(my_dict)
-            return my_dict
+                return my_dict
 
     def new(self, obj):
         """Method new of dbStorage class"""
