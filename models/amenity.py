@@ -15,4 +15,4 @@ class Amenity(BaseModel, Base):
     """
     __tablename__ = 'amenities'
     name = Column(String(128), nullable=False)
-    id = Column(String(60), nullable=False, primary_key=True)
+    place_amenities = []
