@@ -41,7 +41,7 @@ class DBStorage:
 
     def all(self, cls=None):
         """Method all of dbStorage class"""
-        my_cls = ["State", "City"]
+        my_cls = ["State", "City", "User", "Amenity", "Place", "Review"]
         my_dict = {}
         if cls is None:
             for table in my_cls:
