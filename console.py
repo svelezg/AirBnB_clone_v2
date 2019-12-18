@@ -11,6 +11,7 @@ from models.amenity import Amenity
 from models.place import Place
 from models.review import Review
 from shlex import split
+import copy
 
 
 class HBNBCommand(cmd.Cmd):
@@ -44,9 +45,10 @@ class HBNBCommand(cmd.Cmd):
             my_list = line.split(" ")
             objects = storage.all()
             obj = eval("{}()".format(my_list[0]))
-            obj.save()
+            """obj.save()
             key = my_list[0] + '.' + obj.id
-            v = objects[key]
+            print(key)
+            v = objects[key]"""
             if len(my_list) >= 2:
                 for index in range(1, len(my_list)):
                     flag_insert = True
@@ -75,10 +77,10 @@ class HBNBCommand(cmd.Cmd):
                                 flag_insert = False
                     if flag_insert:
                         try:
-                            v.__dict__[pair[0]] = eval(pair[1])
+                            obj.__dict__[pair[0]] = eval(pair[1])
                         except Exception:
-                            v.__dict__[pair[0]] = pair[1]
-                v.save()
+                            obj.__dict__[pair[0]] = pair[1]
+                obj.save()
             print("{}".format(obj.id))
         except SyntaxError:
             print("** class name missing **")
@@ -157,7 +159,9 @@ class HBNBCommand(cmd.Cmd):
         my_list = []
         if not line:
             for key in objects:
-                my_list.append(objects[key])
+                new_obj = copy.deepcopy(objects[key])
+                del new_obj.__dict__["_sa_instance_state"]
+                my_list.append(new_obj)
             print(my_list)
             return
         try:
@@ -167,7 +171,9 @@ class HBNBCommand(cmd.Cmd):
             for key in objects:
                 name = key.split('.')
                 if name[0] == args[0]:
-                    my_list.append(objects[key])
+                    new_obj = copy.deepcopy(objects[key])
+                    del new_obj.__dict__["_sa_instance_state"]
+                    my_list.append(new_obj)
             print(my_list)
         except NameError:
             print("** class doesn't exist **")

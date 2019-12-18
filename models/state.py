@@ -3,6 +3,7 @@
 from models.base_model import BaseModel, Base
 from sqlalchemy import Column, Integer, String, ForeignKey
 
+
 class State(BaseModel, Base):
     """This is the class for State
     Attributes:
