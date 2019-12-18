@@ -77,4 +77,3 @@ class Place(BaseModel, Base):
                                  viewonly=False, backref='places')
         reviews = relationship("Review", backref="places",
                                cascade="delete")
-
