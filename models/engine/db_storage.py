@@ -30,71 +30,67 @@ class DBStorage:
 
     def __init__(self):
         """Instantiation of base model class"""
-        self.__engine = create_engine('mysql+mysqldb://{}:{}@{}/{}'.
-                                      format(os.environ["HBNB_MYSQL_USER"], os.environ["HBNB_MYSQL_PWD"],
-                                      os.environ["HBNB_MYSQL_HOST"], os.environ["HBNB_MYSQL_DB"]),
-                                      pool_pre_ping=True)
+        self.__engine = create_engine(
+            'mysql+mysqldb://{}:{}@{}/{}'.format(os.environ["HBNB_MYSQL_USER"],
+                                                 os.environ["HBNB_MYSQL_PWD"],
+                                                 os.environ["HBNB_MYSQL_HOST"],
+                                                 os.environ["HBNB_MYSQL_DB"]),
+            pool_pre_ping=True)
         if os.environ["HBNB_ENV"] == "test":
-            Base.metadata.drop_all(self.__engine)
-            #tables = self.__session.query('*').all()
-
-            #for table in tables:
-             #   table.delete()
-
-            #self.__session.commit()
+            pass
 
     def all(self, cls=None):
         """Method all of dbStorage class"""
         my_cls = ["State", "City"]
         my_dict = {}
         if cls is None:
-            #tbl = Base.metadata.tables.keys()
             for table in my_cls:
                 query = self.__session.query(eval(table)).all()
-                for element in query:
-                    key = eval(table) + '.' + element.id
-                    my_dict[key] = element
-                print(my_dict)
+                for obj in query:
+                    key = "{}.{}".format(type(obj).__name__, obj.id)
+                    # other = (obj.__dict__)
+                    # del other["_sa_instance_state"]
+                    # new = dict(other)
+                    # my_dict[key] = new
+                    my_dict[key] = obj
+                # print(my_dict)
                 return my_dict
         else:
             print("No None")
-            #query = self.__session.query(eval(cls)).all()
+            # query = self.__session.query(eval(cls)).all()
             query = self.__session.query(eval(cls)).all()
-            for element in query:
-                key = eval(cls) + '.' + element.id
-                my_dict[key] = element
+            for obj in query:
+                key = "{}.{}".format(type(obj).__name__, obj.id)
+                my_dict[key] = obj
+            # print(my_dict)
             return my_dict
 
     def new(self, obj):
         """Method new of dbStorage class"""
         if obj:
-            self.__session.add(obj)
+            mod_obj = obj
+            self.__session.add(mod_obj)
 
     def save(self):
         """Method save of dbStorage class"""
         my_dict = {}
-        #for key, value in self.__dict__.items():
-         #   my_dict[key] = value.to_dict()
-        #self.__session.add(my_dict)
+        # for key, value in self.__dict__.items():
+        # my_dict[key] = value.to_dict()
+        # self.__session.add(my_dict)
         self.__session.commit()
 
     def delete(self, obj=None):
         """Method save of dbStorage class"""
         if obj:
-            result = self.__session.query(eval(obj)).filter(id == obj.id).first()
+            result = self.__session.query(eval(obj)).\
+                filter(id == obj.id).first()
 
             result.delete()
 
     def reload(self):
         """Method reload of dbStorage class"""
-        try:
-            Base.metadata.create_all(self.__engine)
-            Session = sessionmaker()
-            Session.configure(bind=self.__engine)
-            self.__session = Session()
-            query = select('*').select_from(State).order_by(State.id)
-            data = self.__session.execute(query).fetchall()
-            for row in data:
-                print('{}: {}'.format(row.id, row.name))
-        except:
-            pass
+
+        Base.metadata.create_all(self.__engine)
+        Session = sessionmaker()
+        Session.configure(bind=self.__engine)
+        self.__session = Session()
