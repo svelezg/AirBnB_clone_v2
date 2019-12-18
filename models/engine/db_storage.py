@@ -39,7 +39,6 @@ class DBStorage:
         if os.environ["HBNB_ENV"] == "test":
             Base.metadata.drop_all(self.__engine)
 
-
     def all(self, cls=None):
         """Method all of dbStorage class"""
         my_cls = ["State", "City"]

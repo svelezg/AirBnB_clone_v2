@@ -2,8 +2,8 @@
 """This is the city class"""
 from models.base_model import BaseModel, Base
 from sqlalchemy import Column, Integer, String, ForeignKey
-from models import storage
 from sqlalchemy.ext.declarative import declarative_base
+import os
 
 
 class City(BaseModel, Base):
