@@ -74,6 +74,6 @@ class Place(BaseModel, Base):
                     self.amenity_ids.append(a_id)
     else:
         amenities = relationship("Amenity", secondary=place_amenity,
-                                 viewonly=False, backref='amenities')
+                                 viewonly=False)
         reviews = relationship("Review", backref="place",
                                cascade="all, delete-orphan")
