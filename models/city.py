@@ -17,12 +17,12 @@ class City(BaseModel, Base):
     state_id = Column(String(60), ForeignKey('states.id'), nullable=False)
 
     if os.environ['HBNB_TYPE_STORAGE'] != 'db':
-            @property
-            def cities(self):
-                '''FileStorage relationship between State and City '''
-                cities = storage.all(City)
-                cities_relation = []
-                for city in cities.values():
-                    if city.state_id == self.id:
-                        cities_relation = cities_relation.append(city)
-                return cities_relation
+        @property
+        def cities(self):
+            '''FileStorage relationship between State and City '''
+            cities = storage.all(City)
+            cities_relation = []
+            for city in cities.values():
+                if city.state_id == self.id:
+                    cities_relation = cities_relation.append(city)
+            return cities_relation
