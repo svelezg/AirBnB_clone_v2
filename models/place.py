@@ -42,7 +42,6 @@ class Place(BaseModel, Base):
 
     # ****************************************
     amenity_ids = []
-    id = Column(String(60), nullable=False, primary_key=True)
 
     if os.environ['HBNB_TYPE_STORAGE'] != 'db':
         @property
@@ -74,6 +73,8 @@ class Place(BaseModel, Base):
                     self.amenity_ids.append(a_id)
     else:
         amenities = relationship("Amenity", secondary=place_amenity,
-                                 viewonly=False)
-        reviews = relationship("Review", backref="place",
-                               cascade="all, delete-orphan")
+
+                                 viewonly=False, backref='places')
+        reviews = relationship("Review", backref="places",
+                               cascade="delete")
+
