@@ -18,4 +18,4 @@ class City(BaseModel, Base):
 
     if os.environ['HBNB_TYPE_STORAGE'] == 'db':
         places = relationship("Place", backref="cities",
-                              cascade="all, delete-orphan")
+                              cascade="delete")
