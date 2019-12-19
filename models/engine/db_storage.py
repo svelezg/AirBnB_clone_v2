@@ -13,17 +13,16 @@ from sqlalchemy.orm import sessionmaker
 import inspect
 from sqlalchemy import (create_engine)
 from sqlalchemy import select
-
 import os
 import sys
 
 
 class DBStorage:
-    """This class serializes instances to a JSON file and
-    deserializes JSON file to instances
+    """This class maps instances to mySQL tables and
+    mySQL tables to instances
     Attributes:
-        __engine: path to the JSON file
-        __session: objects will be stored
+        __engine:
+        __session:
     """
     __engine = None
     __session = None
@@ -56,8 +55,6 @@ class DBStorage:
                 # print(my_dict)
             return my_dict
         else:
-            print("No None")
-            # query = self.__session.query(eval(cls)).all()
             query = self.__session.query(eval(cls)).all()
             for obj in query:
                 key = "{}.{}".format(type(obj).__name__, obj.id)

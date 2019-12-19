@@ -85,6 +85,8 @@ class TestPlace(unittest.TestCase):
 
     def test_save_Place(self):
         """test if the save works"""
+        if os.environ['HBNB_TYPE_STORAGE'] == 'db':
+            self.skipTest("Does not apply for db storage")
         self.place.save()
         self.assertNotEqual(self.place.created_at, self.place.updated_at)
 

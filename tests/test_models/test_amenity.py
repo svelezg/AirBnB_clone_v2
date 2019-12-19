@@ -55,6 +55,8 @@ class TestAmenity(unittest.TestCase):
 
     def test_save_Amenity(self):
         """test if the save works"""
+        if os.environ['HBNB_TYPE_STORAGE'] == 'db':
+            self.skipTest("Does not apply for db storage")
         self.amenity.save()
         self.assertNotEqual(self.amenity.created_at, self.amenity.updated_at)
 

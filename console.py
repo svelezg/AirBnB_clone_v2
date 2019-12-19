@@ -43,44 +43,39 @@ class HBNBCommand(cmd.Cmd):
             if not line:
                 raise SyntaxError()
             my_list = line.split(" ")
-            objects = storage.all()
             obj = eval("{}()".format(my_list[0]))
-            """obj.save()
-            key = my_list[0] + '.' + obj.id
-            print(key)
-            v = objects[key]"""
-            if len(my_list) >= 2:
-                for index in range(1, len(my_list)):
-                    flag_insert = True
-                    pair = my_list[index].split("=")
-                    if pair[1][0] == '"' and pair[1][-1] == '"':
-                        pair[1] = pair[1].replace('_', ' ')
-                        aux_sublist = pair[1][1:-1]
-                        for idx, character in enumerate(aux_sublist):
-                            if character == '"':
-                                if idx != 0 and aux_sublist[idx - 1] == '\\':
-                                    continue
-                                else:
-                                    flag_insert = False
-                                    break
-                        pair[1] = aux_sublist
-                    else:
-                        if '.' in pair[1]:
-                            try:
-                                pair[1] = float(pair[1])
-                            except:
+
+            for index in range(1, len(my_list)):
+                flag_insert = True
+                pair = my_list[index].split("=")
+                if pair[1][0] == '"' and pair[1][-1] == '"':
+                    pair[1] = pair[1].replace('_', ' ')
+                    aux_sublist = pair[1][1:-1]
+                    for idx, character in enumerate(aux_sublist):
+                        if character == '"':
+                            if idx != 0 and aux_sublist[idx - 1] == '\\':
+                                continue
+                            else:
                                 flag_insert = False
-                        else:
-                            try:
-                                pair[1] = int(pair[1])
-                            except:
-                                flag_insert = False
-                    if flag_insert:
+                                break
+                    pair[1] = aux_sublist
+                else:
+                    if '.' in pair[1]:
                         try:
-                            obj.__dict__[pair[0]] = eval(pair[1])
-                        except Exception:
-                            obj.__dict__[pair[0]] = pair[1]
-                obj.save()
+                            pair[1] = float(pair[1])
+                        except:
+                            flag_insert = False
+                    else:
+                        try:
+                            pair[1] = int(pair[1])
+                        except:
+                            flag_insert = False
+                if flag_insert:
+                    try:
+                        obj.__dict__[pair[0]] = eval(pair[1])
+                    except Exception:
+                        obj.__dict__[pair[0]] = pair[1]
+            obj.save()
             print("{}".format(obj.id))
         except SyntaxError:
             print("** class name missing **")
