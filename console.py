@@ -71,10 +71,7 @@ class HBNBCommand(cmd.Cmd):
                         except:
                             flag_insert = False
                 if flag_insert:
-                    try:
-                        obj.__dict__[pair[0]] = eval(pair[1])
-                    except Exception:
-                        obj.__dict__[pair[0]] = pair[1]
+                    obj.__dict__[pair[0]] = pair[1]
             obj.save()
             print("{}".format(obj.id))
         except SyntaxError:

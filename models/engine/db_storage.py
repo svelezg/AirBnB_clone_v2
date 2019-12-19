@@ -36,7 +36,7 @@ class DBStorage:
                                                  os.environ["HBNB_MYSQL_DB"]),
             pool_pre_ping=True)
         if os.environ["HBNB_ENV"] == "test":
-            Base.metadata.drop_all(self.__engine)
+            Base.metadata.drop_all(bind=self.__engine)
 
     def all(self, cls=None):
         """Method all of dbStorage class"""
