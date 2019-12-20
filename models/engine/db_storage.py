@@ -1,20 +1,17 @@
 #!/usr/bin/python3
 """This is the db_storage.py File dbStorage class for AirBnB"""
-import json
-from models.base_model import BaseModel
+from models.base_model import Base, BaseModel
 from models.user import User
 from models.state import State
 from models.city import City
 from models.amenity import Amenity
 from models.place import Place
 from models.review import Review
-from models.base_model import BaseModel, Base
 from sqlalchemy.orm import sessionmaker
-import inspect
 from sqlalchemy import (create_engine)
-from sqlalchemy import select
+from sqlalchemy import MetaData
+from sqlalchemy.orm import scoped_session
 import os
-import sys
 
 
 class DBStorage:
@@ -30,13 +27,17 @@ class DBStorage:
     def __init__(self):
         """Instantiation of base model class"""
         self.__engine = create_engine(
-            'mysql+mysqldb://{}:{}@{}/{}'.format(os.environ["HBNB_MYSQL_USER"],
-                                                 os.environ["HBNB_MYSQL_PWD"],
-                                                 os.environ["HBNB_MYSQL_HOST"],
-                                                 os.environ["HBNB_MYSQL_DB"]),
+            'mysql+mysqldb://{}:{}@{}/{}'.format(os.getenv("HBNB_MYSQL_USER"),
+                                                 os.getenv("HBNB_MYSQL_PWD"),
+                                                 os.getenv("HBNB_MYSQL_HOST"),
+                                                 os.getenv("HBNB_MYSQL_DB")),
             pool_pre_ping=True)
-        if os.environ["HBNB_ENV"] == "test":
-            Base.metadata.drop_all(bind=self.__engine)
+        Base.metadata.create_all(self.__engine)
+        Session = sessionmaker(bind=self.__engine)
+        self.__session = Session()
+        if os.getenv("HBNB_ENV") == "test":
+            meta = MetaData(self.__engine)
+            meta.drop_all()
 
     def all(self, cls=None):
         """Method all of dbStorage class"""
@@ -77,17 +78,15 @@ class DBStorage:
         self.__session.commit()
 
     def delete(self, obj=None):
-        """Method save of dbStorage class"""
-        if obj:
-            result = self.__session.query(eval(obj)).\
-                filter(id == obj.id).first()
-
-            result.delete()
+        """Method delete of dbStorage class"""
+        if obj is not None:
+            self.__session.delete(obj)
 
     def reload(self):
         """Method reload of dbStorage class"""
 
         Base.metadata.create_all(self.__engine)
-        Session = sessionmaker()
-        Session.configure(bind=self.__engine)
+        session_factory = sessionmaker(bind=self.__engine,
+                                       expire_on_commit=False)
+        Session = scoped_session(session_factory)
         self.__session = Session()
