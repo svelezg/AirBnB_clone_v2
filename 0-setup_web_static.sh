@@ -14,7 +14,7 @@ fi;
 # Create a fake HTML file /data/web_static/releases/test/index.html
 # (with simple content, to test your Nginx configuration)
 sudo touch /data/web_static/releases/test/index.html
-sudo echo "<html>
+echo "<html>
   <head>
   </head>
   <body>
