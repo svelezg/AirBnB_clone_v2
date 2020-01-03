@@ -9,7 +9,6 @@ from fabric.operations import local, put, run
 from fabric.api import env
 from os import path
 
-
 env.hosts = ['35.243.220.111', '35.190.130.57']
 
 
@@ -20,9 +19,13 @@ def do_pack():
     local("mkdir -p versions")
     my_path = local("tar -zcvf versions/web_static_{}.tgz web_static".format(
         datetime.strftime(datetime.now(), "%Y%m%d%H%M%S")))
+
+    my_path_name = "versions/web_static_{}.tgz".format(
+        datetime.strftime(datetime.now(), "%Y%m%d%H%M%S"))
+
     if my_path.failed:
         return None
-    return my_path
+    return my_path_name
 
 
 def do_deploy(archive_path):
@@ -44,7 +47,6 @@ def do_deploy(archive_path):
         run("mv /data/web_static/releases/{}/web_static/*\
                             /data/web_static/releases/{}/"
             .format(my_name_short, my_name_short))
-
         run("rm /tmp/{}".format(my_name))
         run("rm -fr /data/web_static/current")
         run("rm -fr /data/web_static/releases/{}/web_static"
