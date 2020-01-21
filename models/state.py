@@ -4,7 +4,8 @@ from models.base_model import BaseModel, Base
 from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship
 import os
-
+import models
+from models.city import City
 
 class State(BaseModel, Base):
     """This is the class for State
@@ -14,16 +15,16 @@ class State(BaseModel, Base):
     __tablename__ = 'states'
     name = Column(String(128), nullable=False)
 
-    if os.environ['HBNB_TYPE_STORAGE'] != 'db':
+    if os.environ.get('HBNB_TYPE_STORAGE') != 'db':
         @property
         def cities(self):
             """FileStorage relationship between State and City
             """
-            cities = storage.all(City)
+            cities = models.storage.all(City)
             cities_relation = []
             for city in cities.values():
                 if city.state_id == self.id:
-                    cities_relation = cities_relation.append(city)
+                    cities_relation.append(city)
             return cities_relation
     else:
         cities = relationship("City", backref="states",
