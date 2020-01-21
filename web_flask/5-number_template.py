@@ -9,6 +9,7 @@ app = Flask(__name__)
 
 
 @app.route('/', strict_slashes=False)
+
 def hello_hbnb():
     return 'Hello HBNB!'
 
@@ -38,8 +39,9 @@ def show_number(n):
 
 
 @app.route('/number_template/', strict_slashes=False)
-@app.route('/number_template/<n>', strict_slashes=False)
-def hello(n=None):
+@app.route('/number_template/<int:n>', strict_slashes=False)
+def number_template(n=None):
+    # display “n is a number” template
     return render_template('5-number.html', n=n)
 
 
