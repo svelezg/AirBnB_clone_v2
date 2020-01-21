@@ -2,14 +2,12 @@
 """
 starts a Flask web application
 """
-import re
 from flask import Flask
 from flask import render_template
 app = Flask(__name__)
 
 
 @app.route('/', strict_slashes=False)
-
 def hello_hbnb():
     return 'Hello HBNB!'
 
@@ -38,7 +36,6 @@ def show_number(n):
     return '%d is a number' % n
 
 
-@app.route('/number_template/', strict_slashes=False)
 @app.route('/number_template/<int:n>', strict_slashes=False)
 def number_template(n=None):
     # display “n is a number” template
